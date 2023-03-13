@@ -48,17 +48,29 @@ public class GridBuildingSystem : MonoBehaviour
             }
             if (!temp.Placed)
             {
-                Debug.Log("49a girdi");
+            
                 Vector2 touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Vector3Int cellPos = gridLayout.LocalToCell(touchPos);
                 if (prevPos != cellPos)
                 {
-                    Debug.Log("56a girdi");
+                
                     temp.transform.localPosition = gridLayout.CellToLocalInterpolated(cellPos + new Vector3(.5f, .5f, 0f));
                     prevPos = cellPos;
                     FollowBuilding();
                 }
             }
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (temp.CanBePlaced())
+            {
+                temp.Place();
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ClearArea();
+            Destroy(temp.gameObject);
         }
     }
     #endregion
@@ -137,10 +149,25 @@ public class GridBuildingSystem : MonoBehaviour
         TempTailMap.SetTilesBlock(buildingArea, tileArray);
         prevArea = buildingArea;
     }
-    //private bool CanTakeArea()
-    //{
 
-    //}
+    public bool CanTakeArea(BoundsInt area)
+    {
+        TileBase[] baseArray = GetTilesBlock(area, MainTailMap);
+        foreach (var b in baseArray)
+        {
+            if (b!= tileBases[TileType.White])
+            {
+                Debug.Log("Cannot place here");
+                return false;
+            }
+        }
+        return true;
+    }
+    public void TakeArea(BoundsInt area)
+    {
+        SetTilesBlock(area, TileType.Empty, TempTailMap);
+        SetTilesBlock(area, TileType.Green, MainTailMap);
+    }
 
     #endregion
 }
