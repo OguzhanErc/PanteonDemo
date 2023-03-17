@@ -81,6 +81,7 @@ public class GridBuildingSystem : MonoBehaviour
     {
         TileBase[] array = new TileBase[area.size.x * area.size.y * area.size.z];
         int counter = 0;
+
         foreach (var v in area.allPositionsWithin)
         {
             Debug.Log(v);
@@ -92,7 +93,7 @@ public class GridBuildingSystem : MonoBehaviour
     }
     private static void SetTilesBlock(BoundsInt area, TileType type, Tilemap tilemap)
     {
-        int size = area.size.x * area.size.z;
+        int size = area.size.x * area.size.y * area.size.z;
         TileBase[] tileArray = new TileBase[size];
         FillTiles(tileArray, type);
         tilemap.SetTilesBlock(area, tileArray);
